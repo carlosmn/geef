@@ -45,7 +45,7 @@ service_path(<<"git-receive-pack ", Path/binary>>) ->
 -spec unpack(iolist()) -> {error, ebufs} | {non_neg_integer(), binary()}.
 unpack(In) ->
     <<BLen:4/binary, Rest/binary>> = iolist_to_binary(In),
-    Len = binary_to_integer(BLen, 16),
+    Len = erlang:list_to_integer(unicode:characters_to_list(BLen), 16),
     do_unpack(Len, Rest).
 
 do_unpack(0, Rest) ->
