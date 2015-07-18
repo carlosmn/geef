@@ -4,10 +4,10 @@
 
 repo_test_() ->
     case os:getenv("GEEF_RESOURCES") of
-	false ->
-	    [];
-	_ ->
-	    {foreach, fun start/0, fun stop/1, [fun amount_test/1]}
+    false ->
+        [];
+    _ ->
+        {foreach, fun start/0, fun stop/1, [fun amount_test/1]}
     end.
 
 start() ->
@@ -18,10 +18,10 @@ start() ->
 
 count_walk(Walk, Acc) ->
     case geef_revwalk:next(Walk) of
-	{ok, _} ->
-	    count_walk(Walk, Acc + 1);
-	{error, iterover} ->
-	    Acc
+    {ok, _} ->
+        count_walk(Walk, Acc + 1);
+    {error, iterover} ->
+        Acc
     end.
 
 amount_test(Repo) ->

@@ -16,6 +16,7 @@
 -export([set/3]).
 -export([get_bool/2]).
 -export([get_string/2]).
+-export([stop/1]).
 %% gen_server callbacks
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2,
 	 terminate/2, code_change/3]).
@@ -60,6 +61,9 @@ get_bool(Pid, Name) ->
 get_string(Pid, Name) ->
     gen_server:call(Pid, {get_string, Name}).
 
+stop(Pid) ->
+    gen_server:call(Pid, stop).
+
 %%%===================================================================
 %%% gen_server callbacks
 %%%===================================================================
@@ -96,7 +100,10 @@ handle_call({set_string, Name, Val}, _From, State = #state{handle=Handle}) ->
 
 handle_call({get_string, Name}, _From, State = #state{handle=Handle}) ->
     Reply = geef_nif:config_get_string(Handle, Name),
-    {reply, Reply, State}.
+    {reply, Reply, State};
+
+handle_call(stop, _From, State) ->
+    {stop, normal, ok, State}.
 
 %%--------------------------------------------------------------------
 %% @private

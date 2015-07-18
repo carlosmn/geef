@@ -37,6 +37,9 @@ defmodule Mix.Tasks.Compile.Nif do
   def run(_) do
     project = Mix.Project.get!
 
+    Mix.shell.info("* Running make...")
+    Mix.shell.info(:os.cmd('make'))
+
     if function_exported?(project, :nif, 0) do
       do_run(project.nif)
     else
@@ -110,7 +113,8 @@ defmodule Geef.Mixfile do
     [ app: :geef,
       version: "0.0.1",
       compilers: [:nif, :erlang, :elixir, :app],
-      deps: deps ]
+      deps: deps,
+      dialyzer: dialyzer ]
   end
 
   def nif do
@@ -128,4 +132,10 @@ defmodule Geef.Mixfile do
   defp deps do
     []
   end
+
+  def dialyzer do
+    [ plt_apps: [:erts, :kernel, :stdlib, :mnesia],
+      flags: ["-Wunmatched_returns","-Werror_handling","-Wrace_conditions", "-Wno_opaque"]]
+  end
+
 end

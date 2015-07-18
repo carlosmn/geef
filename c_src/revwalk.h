@@ -18,6 +18,7 @@ ERL_NIF_TERM geef_revwalk_new(ErlNifEnv *env, int argc, const ERL_NIF_TERM argv[
 ERL_NIF_TERM geef_revwalk_next(ErlNifEnv *env, int argc, const ERL_NIF_TERM argv[]);
 ERL_NIF_TERM geef_revwalk_push(ErlNifEnv *env, int argc, const ERL_NIF_TERM argv[]);
 ERL_NIF_TERM geef_revwalk_sorting(ErlNifEnv *env, int argc, const ERL_NIF_TERM argv[]);
+ERL_NIF_TERM geef_revwalk_simplify_first_parent(ErlNifEnv *env, int argc, const ERL_NIF_TERM argv[]);
 ERL_NIF_TERM geef_revwalk_reset(ErlNifEnv *env, int argc, const ERL_NIF_TERM argv[]);
 
 #endif

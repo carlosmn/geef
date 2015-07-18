@@ -8,8 +8,8 @@ defmodule Geef.Pkt do
   
   def parse_request(str) do
     case :geef_pkt.parse_request(str) do
-      {:ok, req} ->
-        {:ok, Geef.Request.new req}
+      {:ok, {:geef_request, service, path, host}} ->
+        {:ok, %Geef.Request{service: service, path: path, host: host}}
       error ->
         error
     end

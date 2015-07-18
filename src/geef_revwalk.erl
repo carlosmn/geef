@@ -12,11 +12,11 @@
 
 %% API
 -export([start_link/1]).
--export([push/2, hide/2, next/1, sorting/2, stop/1]).
+-export([push/2, hide/2, next/1, sorting/2, simplify_first_parent/1, reset/1, stop/1]).
 
 %% gen_server callbacks
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2,
-	 terminate/2, code_change/3]).
+     terminate/2, code_change/3]).
 
 -record(state, {handle}).
 -include("geef_records.hrl").
@@ -46,7 +46,16 @@ sorting(Pid, Opts) when is_list(Opts) ->
 sorting(Pid, Opt) when is_atom(Opt) ->
     gen_server:call(Pid, {sort, [Opt]}).
 
+-spec simplify_first_parent(pid) -> ok.
+simplify_first_parent(Pid) ->
+    gen_server:call(Pid, simplify_first_parent).
+
+-spec reset(pid) -> ok.
+reset(Pid) ->
+    gen_server:call(Pid, reset).
+
 %% @doc Next commit in the walk
+-spec next(pid) -> {ok, geef_oid:oid()} | {error, iterover}.
 next(Pid) ->
     gen_server:call(Pid, next).
 
@@ -76,12 +85,18 @@ init(Handle) ->
 handle_call({sort, Opts}, _From, State = #state{handle=Handle}) ->
     geef_nif:revwalk_sorting(Handle, Opts),
     {reply, ok, State};
+handle_call(simplify_first_parent, _From, State = #state{handle=Handle}) ->
+    geef_nif:revwalk_simplify_first_parent(Handle),
+    {reply, ok, State};
 handle_call({push, Oid}, _From, State = #state{handle=Handle}) ->
     Reply = geef_nif:revwalk_push(Handle, Oid, false),
     {reply, Reply, State};
 handle_call({hide, Oid}, _From, State = #state{handle=Handle}) ->
     Reply = geef_nif:revwalk_push(Handle, Oid, true),
     {reply, Reply, State};
+handle_call(reset, _From, State = #state{handle=Handle}) ->
+    geef_nif:revwalk_reset(Handle),
+    {reply, ok, State};
 handle_call(next, _From, State = #state{handle=Handle}) ->
     Reply = geef_nif:revwalk_next(Handle),
     {reply, Reply, State};

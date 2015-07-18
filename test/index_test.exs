@@ -2,7 +2,6 @@ defmodule IndexTest do
   use ExUnit.Case
   use Geef
   alias Geef.Index
-  alias Geef.Index.Entry
   import RepoHelpers
 
 

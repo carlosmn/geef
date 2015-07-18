@@ -115,7 +115,7 @@ commit_tree(_Handle) ->
 commit_create(_RepoHandle, _Ref, _Author, _Committer, _Encoding, _Message, _Tree, _Parents) ->
     ?NIF_FN.
 
--spec commit_message(term) -> binary().
+-spec commit_message(term) -> {ok, binary()} | {error, term()}.
 commit_message(_CommitHandle) ->
     ?NIF_FN.
 
@@ -157,6 +157,9 @@ revwalk_next(_Walk) ->
     ?NIF_FN.
 
 revwalk_sorting(_Walk, _Sort) ->
+    ?NIF_FN.
+
+revwalk_simplify_first_parent(_Walk) ->
     ?NIF_FN.
 
 revwalk_reset(_Walk) ->

@@ -117,7 +117,7 @@ geef_commit_create(ErlNifEnv *env, int argc, const ERL_NIF_TERM argv[])
 		return geef_oom(env);
 
 	i = 0;
-	tail = argv[8];
+	tail = argv[7];
 	while (enif_get_list_cell(env, tail, &head, &tail)) {
 		if (!enif_inspect_binary(env, head, &bin))
 			return enif_make_badarg(env);
@@ -145,13 +145,11 @@ ERL_NIF_TERM
 geef_commit_message(ErlNifEnv *env, int argc, const ERL_NIF_TERM argv[])
 {
 	ErlNifBinary bin;
-	geef_object *obj, *tree;
+	geef_object *obj;
 	const char *msg;
 
 	if (!enif_get_resource(env, argv[0], geef_object_type, (void **) &obj))
 		return enif_make_badarg(env);
-
-	tree = enif_alloc_resource(geef_object_type, sizeof(geef_object));
 
 	msg = git_commit_message((git_commit *) obj->obj);
 	if (geef_string_to_bin(&bin, msg) < 0)

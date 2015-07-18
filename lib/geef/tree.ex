@@ -66,30 +66,31 @@ defmodule Geef.TreeError do
   end
 end
 
-defimpl Enumerable, for: Geef.Tree do
+defimpl Enumerable, for: Geef.Object do
+  alias Geef.Object
   alias Geef.Tree
   alias Geef.TreeError
 
-  def count(tree) do
-    Tree.count(tree)
+  def count(tree = %Object{type: :tree}) do
+    {:ok, Tree.count(tree)}
   end
 
-  def member?(tree, key) do
+  def member?(tree = %Object{type: :tree}, key) do
     case Tree.get(tree, key) do
-      {:ok, _} -> true
-      _ -> false
+      {:ok, _} -> {:ok, true}
+      _ -> {:ok, false}
     end
   end
 
-  def reduce(tree, acc, fun) do
+  def reduce(tree = %Object{type: :tree}, acc, fun) do
     reduce(tree, 0, Tree.count(tree), acc, fun)
   end
 
   # We're done when the index is equal to the number of entries
-  defp reduce(_, idx, idx, acc, _), do: acc
+  defp reduce(_, idx, idx, {:cont, acc}, _), do: {:done, acc}
 
   # Call the user-passed function and recurse with the next index
-  defp reduce(tree, idx, count, acc, fun) do
+  defp reduce(tree, idx, count, {:cont, acc}, fun) do
     case Tree.nth(tree, idx) do
       {:ok, entry} ->
         reduce(tree, idx + 1, count, fun.(entry, acc), fun)
@@ -98,4 +99,9 @@ defimpl Enumerable, for: Geef.Tree do
     end
   end
 
+  # Almost default Enumerable implementation
+  defp reduce(_, _, _, {:halt, acc}, _), do: {:halted, acc}
+  defp reduce(tree, idx, count, {:suspend, acc}, fun) do
+    {:suspended, acc, &reduce(tree, idx, count, &1, fun)}
+  end
 end

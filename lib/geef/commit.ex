@@ -14,13 +14,8 @@ defmodule Geef.Commit do
   end
 
   @spec tree(t) :: {:ok, Tree.t} | {:error, any}
-  def tree(%Object{type: :commit, handle: handle}) do
-    case :geef_nif.commit_tree(handle) do
-      {:ok, id, handle} ->
-        {:ok, %Object{type: :tree, id: id, handle: handle}}
-      error = {:error, _} ->
-        error
-    end
+  def tree(%Object{type: :commit, handle: handle, repo: repo}) do
+    Tree.lookup repo, :geef_nif.commit_tree_id(handle)
   end
 
   @spec tree!(t) :: Tree.t

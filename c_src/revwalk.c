@@ -108,6 +108,18 @@ geef_revwalk_sorting(ErlNifEnv *env, int argc, const ERL_NIF_TERM argv[])
 	return atoms.ok;
 }
 
+ERL_NIF_TERM
+geef_revwalk_simplify_first_parent(ErlNifEnv *env, int argc, const ERL_NIF_TERM argv[])
+{
+	geef_revwalk *walk;
+
+	if (!enif_get_resource(env, argv[0], geef_revwalk_type, (void **) &walk))
+		return enif_make_badarg(env);
+
+	git_revwalk_simplify_first_parent(walk->walk);
+
+	return atoms.ok;
+}
 
 ERL_NIF_TERM
 geef_revwalk_reset(ErlNifEnv *env, int argc, const ERL_NIF_TERM argv[])

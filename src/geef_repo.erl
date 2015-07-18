@@ -7,12 +7,12 @@
 
 %% gen_server callbacks
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2,
-	 terminate/2, code_change/3]).
+     terminate/2, code_change/3]).
 
 %% API
 -export([open/1, init/2, path/1, workdir/1, odb/1, is_bare/1, references/1, discover/1,
-	 lookup_object/2, revwalk/1, stop/1,
-	 reference_dwim/2, handle/1, iterator/2]).
+     lookup_object/2, revwalk/1, stop/1,
+     reference_dwim/2, handle/1, iterator/2]).
 -export([reference_has_log/2]).
 -export([reference_resolve/2]).
 -export([reflog_read/2, reflog_delete/2]).
@@ -37,21 +37,21 @@ discover(Path) ->
 -spec open(iolist()) -> {ok, pid()} | {error, term()}.
 open(Path) ->
     case geef_nif:repository_open(Path) of
-	{ok, Handle} ->
-	    start_link(Handle);
-	Other ->
-	    Other
+    {ok, Handle} ->
+        start_link(Handle);
+    Other ->
+        Other
     end.
 
 %% @doc Initialize a new repository
 -spec init(iolist(), boolean()) -> {ok, pid()} | {error, term()}.
 init(Path, Bare) ->
     case geef_nif:repository_init(Path, Bare) of
-	{ok, Handle} ->
-	    start_link(Handle);
-	Other ->
-	    Other
-    end.	
+    {ok, Handle} ->
+        start_link(Handle);
+    Other ->
+        Other
+    end.
 
 %% @doc The repository's git-dir path
 -spec path(pid()) -> binary().
@@ -224,18 +224,18 @@ start_link(Handle) ->
 
 handle_odb(Handle) ->
     case geef_nif:repository_get_odb(Handle) of
-	{ok, OdbHandle} ->
-	    geef_odb:start_link(OdbHandle);
-	Other ->
-	    Other
+    {ok, OdbHandle} ->
+        geef_odb:start_link(OdbHandle);
+    Other ->
+        Other
     end.
 
 handle_revwalk(Handle) ->
     case geef_nif:revwalk_new(Handle) of
-	{ok, WalkHandle} ->
-	    geef_revwalk:start_link(WalkHandle);
-	Error ->
-	    Error
+    {ok, WalkHandle} ->
+        geef_revwalk:start_link(WalkHandle);
+    Error ->
+        Error
     end.
 
 handle_config(Handle) ->
