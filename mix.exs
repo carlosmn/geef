@@ -81,6 +81,7 @@ defmodule Mix.Tasks.Compile.Nif do
         if do_cmd(port) != 0 do
           raise Mix.Error, message: "Error compiling #{file}"
         end
+        Mix.Project.build_structure
         :ok
     end
   end
