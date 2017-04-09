@@ -7,12 +7,13 @@ to Erlang.
 INSTALLING AND RUNNING
 ========================
 
-First you need to install libgit2:
+First you need to install libgit2, which requires [CMake](https://cmake.org/):
 
     $ git clone git://github.com/libgit2/libgit2.git
     $ cd libgit2
-    $ make
-    $ make install
+    $ mkdir build && cd build
+    $ cmake ..
+    $ cmake --build
 
 Now, if you have Erlang OTP_R13B04 installed, you can compile this NIF to run
 in it.
