@@ -83,7 +83,7 @@ geef_index_read_tree(ErlNifEnv *env, int argc, const ERL_NIF_TERM argv[])
 	if (!enif_get_resource(env, argv[0], geef_index_type, (void **) &index))
 		return enif_make_badarg(env);
 
-	if (!enif_get_resource(env, argv[0], geef_object_type, (void **) &tree))
+	if (!enif_get_resource(env, argv[1], geef_object_type, (void **) &tree))
 		return enif_make_badarg(env);
 
 	if (git_index_read_tree(index->index, (git_tree *)tree->obj) < 0)
